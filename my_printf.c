@@ -172,28 +172,39 @@ int size_octa(int n){
 	return size;
 }
 
-void my_printf(char *str, ...)			//첫번째 인자는 문자열, 그 이후 인자는 가변인자
+void my_printf(char *str, ...)	
 {
-	va_list va;								//가변인자 리스트
-	int i=0;									//반복
+	va_list va;		
+	int i=0;	
 
-	va_start(va, str);						//가변인자 준비
-	while (str[i])							//문자열 순회
+	va_start(va, str);		
+	while (str[i])		
 	{
-		if (str[i] == '%')					//문자열 내 서식문자
+		if (str[i] == '%')			
 		{
-			if (str[i + 1] == 's')					//%s 자리에 오는 string 문자열 전달
+			if(str[i + 1] >= '0' && str[i+1] <= '9') { align = 0; }
+			if(str[i + 1] == '-') { align = 1; i++; }
+			else if(str[i + 1] == '+') { align = 2; i++; }
+
+			while(str[i + 1] >= '0' && str[i+1] <= '9'){
+				width *= 10;
+				width += str[i + 1] - '0';
+				i++;
+			}
+
+			if (str[i + 1] == 's')	
 				my_printf_str(va_arg(va, char *));		
-			else if (str[i + 1] == 'd')				//%d 자리에 오는 int형 정수 전달
+			else if (str[i + 1] == 'd')	
 				my_printf_int(va_arg(va, int));			
-			else if (str[i + 1] == 'c')				//%c 자리에 오는 char 문자형 출력
+			else if (str[i + 1] == 'c')	
 				my_printf_char((char)va_arg(va, int));		
-			else if (str[i + 1] == 'x')	//%x 자리에 오는 int형 정수 전달
+			else if (str[i + 1] == 'x')	
 				my_printf_hexa(va_arg(va, unsigned int), "0123456789abcdef");
-			else if (str[i + 1] == 'o')				//%o 자리에 오는 int형 정수 전달				
+			else if (str[i + 1] == 'o')					
 				my_printf_octa(va_arg(va, unsigned int));				
 			else
-				my_printf_char(str[i + 1]);			
+				my_printf_char(str[i + 1]);
+			width = 0;
 			i++;
 		}
 		else
@@ -205,9 +216,13 @@ void my_printf(char *str, ...)			//첫번째 인자는 문자열, 그 이후 인자는 가변인자
 
 int main(void)
 {
-	my_printf("test %d %c %o %x\n", 1, 'c', 16, 16);
-	my_printf("test %-12d%-4d%4d%+4d\n", 2016, 12, 20, 18)
+	my_printf("Output test\n");
+	my_printf("%d %c %o %x\n\n", 1, 'c', 16, 16);
+	my_printf("Minimum filed-width test\n");
+	my_printf("%10d%5d%5d\n\n", 2016, 12, 20);
+	my_printf("Alignment test\n");
+	my_printf("%5d[%%5d]\n", 123);
+	my_printf("%-5d[%%-5d]\n", 123);
+	my_printf("%+5d[%%+5d]\n", 123);
 }
-
-
 
