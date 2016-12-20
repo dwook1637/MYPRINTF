@@ -1,9 +1,10 @@
-#include <stdarg.h>	//가변인자 관련해서 들어있음
+#include <stdarg.h>
 #include <stdio.h>
 #include <malloc.h>
 
-int width=0;		//필드 너비
-int align=-1;		//정렬 모드
+#define HEXA_ARR "0123456789abcdef"
+int width=0;	
+int align=-1;	
 
 void my_printf_char(char c)
 {
@@ -27,7 +28,7 @@ void my_printf_hexa(unsigned int n, char *hexa_arr)
 	int size = size_hexa(n);
 	char* blank = NULL;
 
-	cur = n % 16;		//cur은 0부터 15까지
+	cur = n % 16;	
 	res = (n - cur) / 16;
 
 	if(align == 0){
@@ -60,9 +61,9 @@ void my_printf_hexa(unsigned int n, char *hexa_arr)
 
 void my_printf_int(int n)
 {
-	int cur;		//10진수로 출력할 1의 자리 부분
-	int res;		//cur을 제외한 출력할 수의 나머지 부분
-	char c;			//아스키코드로 보정
+	int cur;	
+	int res;	
+	char c;		
 	int i;
 	int size = size_int(n);
 	char* blank = NULL;
@@ -89,7 +90,7 @@ void my_printf_int(int n)
 	}
 	align = -1;
 
-	if (res)		//출력할 부분이 남아있으면 계속 출력(먼저 출력됨)
+	if (res)	
 		my_printf_int(res);
 	my_printf_char(c);
 
@@ -103,7 +104,7 @@ void my_printf_octa(unsigned int n)
 {
 	int cur;		
 	int res;		
-	char c;			//아스키코드로 보정
+	char c;		
 	int i;
 	int size = size_octa(n);
 	char* blank = NULL;
@@ -129,7 +130,7 @@ void my_printf_octa(unsigned int n)
 	cur = n % 8;
 	c = '0' + cur;
 	res = (n - cur) / 8;
-	if (res)		//출력할 부분이 남아있으면 계속 출력(먼저 출력됨)
+	if (res)	
 		my_printf_int(res);
 	my_printf_char(c);
 
@@ -199,7 +200,7 @@ void my_printf(char *str, ...)
 			else if (str[i + 1] == 'c')	
 				my_printf_char((char)va_arg(va, int));		
 			else if (str[i + 1] == 'x')	
-				my_printf_hexa(va_arg(va, unsigned int), "0123456789abcdef");
+				my_printf_hexa(va_arg(va, unsigned int), HEXA_ARR);
 			else if (str[i + 1] == 'o')					
 				my_printf_octa(va_arg(va, unsigned int));				
 			else
